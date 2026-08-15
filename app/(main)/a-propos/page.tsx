@@ -1,3 +1,4 @@
+"use client"
 
 import type { Metadata } from "next"
 import Image from "next/image"
@@ -5,14 +6,14 @@ import Link from "next/link"
 import { motion } from "framer-motion"
 import { ArrowRight, CheckCircle2 } from "lucide-react"
 
-import { PageHeader } from "@/components/layout/page-header"
-import { Breadcrumb } from "@/components/layout/breadcrumb"
+import PageHeader from "@/components/layout/page-header"
+import Breadcrumb from "@/components/layout/breadcrumb"
 
-export const metadata: Metadata = {
-  title: "À propos du PAH",
-  description:
-    "Découvrez le Parti Agricole Haïtien, sa mission, ses priorités et son engagement pour la transformation agricole et économique d'Haïti.",
-}
+// NOTE : Les métadonnées ne fonctionnent pas dans un "use client".
+// Si vous en avez besoin, extrayez-les dans un layout.tsx séparé
+// ou utilisez le fichier metadata.ts à côté de page.tsx.
+// Pour l'instant, je les commente pour que le build passe :
+// export const metadata = { ... }
 
 export default function AboutPage() {
   const missions = [
@@ -89,33 +90,22 @@ export default function AboutPage() {
 
   return (
     <main className="min-h-screen bg-white dark:bg-gray-950">
-      {/* =========================================================
-          HEADER
-      ========================================================= */}
-
+      {/* HEADER */}
       <PageHeader
         title="À propos du PAH"
         subtitle="Construire une Haïti productive, souveraine et prospère."
         backgroundImage="/images/about/agriculture-header.jpg"
       />
 
-      {/* =========================================================
-          BREADCRUMB
-      ========================================================= */}
-
+      {/* BREADCRUMB */}
       <div className="container mx-auto px-4">
         <Breadcrumb items={[{ label: "À propos" }]} />
       </div>
 
-      {/* =========================================================
-          PRÉSENTATION
-      ========================================================= */}
-
+      {/* PRÉSENTATION */}
       <section className="py-16 md:py-24">
         <div className="container mx-auto px-4">
           <div className="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-2 lg:gap-16">
-            {/* Texte */}
-
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -156,8 +146,6 @@ export default function AboutPage() {
               </div>
             </motion.div>
 
-            {/* Photo */}
-
             <motion.div
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -177,7 +165,6 @@ export default function AboutPage() {
 
               <div className="absolute -bottom-6 -left-6 rounded-xl bg-pah-yellow p-6 text-pah-text shadow-xl">
                 <div className="font-heading text-3xl font-bold">PAH</div>
-
                 <div className="mt-1 text-sm font-medium">
                   Parti Agricole Haïtien
                 </div>
@@ -187,10 +174,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* =========================================================
-          NOTRE MISSION
-      ========================================================= */}
-
+      {/* NOTRE MISSION */}
       <section className="bg-gray-50 py-16 dark:bg-gray-900/50 md:py-24">
         <div className="container mx-auto px-4">
           <motion.div
@@ -231,7 +215,6 @@ export default function AboutPage() {
                   size={18}
                   className="mt-0.5 shrink-0 text-pah-green"
                 />
-
                 <span className="text-sm text-gray-700 dark:text-gray-300">
                   {item}
                 </span>
@@ -241,15 +224,10 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* =========================================================
-          NOTRE ENGAGEMENT
-      ========================================================= */}
-
+      {/* NOTRE ENGAGEMENT */}
       <section className="py-16 md:py-24">
         <div className="container mx-auto px-4">
           <div className="mx-auto grid max-w-5xl items-center gap-12 lg:grid-cols-2 lg:gap-16">
-            {/* Texte */}
-
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -284,8 +262,6 @@ export default function AboutPage() {
               </div>
             </motion.div>
 
-            {/* Valeurs */}
-
             <motion.div
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -312,10 +288,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* =========================================================
-          NOS PRIORITÉS — PHOTOS
-      ========================================================= */}
-
+      {/* NOS PRIORITÉS */}
       <section className="bg-gray-50 py-16 dark:bg-gray-900/50 md:py-24">
         <div className="container mx-auto px-4">
           <motion.div
@@ -340,8 +313,6 @@ export default function AboutPage() {
             </p>
           </motion.div>
 
-          {/* Grille */}
-
           <div className="mx-auto grid max-w-6xl gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {priorities.map((item, index) => (
               <motion.article
@@ -355,8 +326,6 @@ export default function AboutPage() {
                 }}
                 className="group overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl dark:border-gray-800 dark:bg-gray-950"
               >
-                {/* Photo */}
-
                 <div className="relative aspect-[16/10] overflow-hidden bg-gray-200 dark:bg-gray-800">
                   <Image
                     src={item.image}
@@ -366,17 +335,11 @@ export default function AboutPage() {
                     className="object-cover transition-transform duration-700 group-hover:scale-105"
                   />
 
-                  {/* Overlay */}
-
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
-
-                  {/* Numéro */}
 
                   <div className="absolute left-5 top-5 flex h-10 w-10 items-center justify-center rounded-full bg-white/95 font-heading text-sm font-bold text-pah-green shadow-lg">
                     {item.number}
                   </div>
-
-                  {/* Titre sur photo */}
 
                   <div className="absolute bottom-0 left-0 right-0 p-5">
                     <h3 className="font-heading text-xl font-bold text-white">
@@ -384,8 +347,6 @@ export default function AboutPage() {
                     </h3>
                   </div>
                 </div>
-
-                {/* Texte */}
 
                 <div className="p-6">
                   <p className="text-sm leading-7 text-gray-600 dark:text-gray-400">
@@ -400,10 +361,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* =========================================================
-          PRÉSIDENT
-      ========================================================= */}
-
+      {/* PRÉSIDENT */}
       <section className="py-16 md:py-24">
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-5xl">
@@ -424,8 +382,6 @@ export default function AboutPage() {
             </motion.div>
 
             <div className="grid items-center gap-10 lg:grid-cols-5 lg:gap-16">
-              {/* PHOTO */}
-
               <motion.div
                 initial={{ opacity: 0, x: -30 }}
                 whileInView={{ opacity: 1, x: 0 }}
@@ -434,11 +390,7 @@ export default function AboutPage() {
                 className="lg:col-span-2"
               >
                 <div className="relative mx-auto max-w-sm">
-                  {/* Cadre décoratif */}
-
                   <div className="absolute -bottom-4 -right-4 h-full w-full rounded-2xl bg-pah-green/10" />
-
-                  {/* Photo */}
 
                   <div className="relative aspect-[3/4] overflow-hidden rounded-2xl bg-gray-200 shadow-2xl dark:bg-gray-800">
                     <Image
@@ -450,8 +402,6 @@ export default function AboutPage() {
                       className="object-cover"
                     />
                   </div>
-
-                  {/* Identification */}
 
                   <div className="relative mx-5 -mt-8 rounded-xl bg-white p-5 text-center shadow-xl dark:bg-gray-900">
                     <h3 className="font-heading text-xl font-bold text-gray-900 dark:text-white">
@@ -468,8 +418,6 @@ export default function AboutPage() {
                   </div>
                 </div>
               </motion.div>
-
-              {/* TEXTE */}
 
               <motion.div
                 initial={{ opacity: 0, x: 30 }}
@@ -507,8 +455,6 @@ export default function AboutPage() {
                   propres forces.
                 </p>
 
-                {/* Valeurs */}
-
                 <div className="flex flex-wrap gap-2 border-t border-gray-200 pt-5 dark:border-gray-800">
                   {values.map((value) => (
                     <span
@@ -525,10 +471,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* =========================================================
-          CTA FINAL
-      ========================================================= */}
-
+      {/* CTA FINAL */}
       <section className="bg-pah-green-dark py-16 md:py-20">
         <div className="container mx-auto px-4 text-center">
           <motion.div
