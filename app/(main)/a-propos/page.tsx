@@ -1,19 +1,12 @@
 "use client"
 
-import type { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
 import { motion } from "framer-motion"
 import { ArrowRight, CheckCircle2 } from "lucide-react"
 
-import PageHeader from "@/components/layout/page-header"
-import Breadcrumb from "@/components/layout/breadcrumb"
-
-// NOTE : Les métadonnées ne fonctionnent pas dans un "use client".
-// Si vous en avez besoin, extrayez-les dans un layout.tsx séparé
-// ou utilisez le fichier metadata.ts à côté de page.tsx.
-// Pour l'instant, je les commente pour que le build passe :
-// export const metadata = { ... }
+import { PageHeader } from "@/components/layout/page-header"
+import { Breadcrumb } from "@/components/layout/breadcrumb"
 
 export default function AboutPage() {
   const missions = [
