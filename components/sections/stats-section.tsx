@@ -4,6 +4,13 @@ import { useEffect, useRef, useState } from "react"
 import { motion, useInView } from "framer-motion"
 import { siteConfig } from "@/lib/data/site"
 
+interface Stat {
+  label: string
+  value: number | string
+  suffix?: string
+  prefix?: string
+}
+
 interface AnimatedCounterProps {
   value: number | string
   suffix?: string
@@ -39,22 +46,23 @@ function AnimatedCounter({
       return
     }
 
-    let start = 0
+    let current = 0
+
     const duration = 2000
     const interval = 16
     const steps = Math.max(1, Math.floor(duration / interval))
     const increment = numericValue / steps
 
     const timer = window.setInterval(() => {
-      start += increment
+      current += increment
 
-      if (start >= numericValue) {
+      if (current >= numericValue) {
         setCount(numericValue)
         window.clearInterval(timer)
         return
       }
 
-      setCount(Math.floor(start))
+      setCount(Math.floor(current))
     }, interval)
 
     return () => {
@@ -72,13 +80,9 @@ function AnimatedCounter({
 }
 
 export function StatsSection() {
-  const stats = siteConfig.stats
+  const stats = (siteConfig.stats ?? []) as Stat[]
 
-  /*
-   * Les statistiques sont actuellement vides dans site.ts.
-   * On ne rend donc pas une section vide.
-   */
-  if (!stats || stats.length === 0) {
+  if (stats.length === 0) {
     return null
   }
 
@@ -87,7 +91,7 @@ export function StatsSection() {
       className="relative overflow-hidden bg-pah-green py-16 md:py-20"
       aria-label="Chiffres clés"
     >
-      {/* Motif décoratif discret */}
+      {/* Motif décoratif */}
       <div
         className="pointer-events-none absolute inset-0 opacity-[0.04]"
         aria-hidden="true"
@@ -102,16 +106,7 @@ export function StatsSection() {
       </div>
 
       <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
-        <div
-          className="
-            grid
-            grid-cols-2
-            gap-8
-            md:grid-cols-2
-            lg:grid-cols-4
-            lg:gap-10
-          "
-        >
+        <div className="grid grid-cols-2 gap-8 md:grid-cols-2 lg:grid-cols-4 lg:gap-10">
           {stats.map((stat, index) => (
             <motion.div
               key={`${stat.label}-${index}`}
@@ -134,17 +129,7 @@ export function StatsSection() {
               }}
               className="text-center"
             >
-              <div
-                className="
-                  mb-2
-                  text-3xl
-                  font-bold
-                  tracking-tight
-                  text-white
-                  sm:text-4xl
-                  md:text-5xl
-                "
-              >
+              <div className="mb-2 text-3xl font-bold tracking-tight text-white sm:text-4xl md:text-5xl">
                 <AnimatedCounter
                   value={stat.value}
                   suffix={stat.suffix}
@@ -152,15 +137,7 @@ export function StatsSection() {
                 />
               </div>
 
-              <div
-                className="
-                  text-sm
-                  font-medium
-                  leading-relaxed
-                  text-white/70
-                  sm:text-base
-                "
-              >
+              <div className="text-sm font-medium leading-relaxed text-white/70 sm:text-base">
                 {stat.label}
               </div>
             </motion.div>
