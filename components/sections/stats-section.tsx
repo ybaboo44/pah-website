@@ -16,8 +16,13 @@ function AnimatedCounter({
   prefix = "",
 }: AnimatedCounterProps) {
   const [count, setCount] = useState(0)
+
   const ref = useRef<HTMLSpanElement | null>(null)
-  const isInView = useInView(ref, { once: true })
+
+  const isInView = useInView(ref, {
+    once: true,
+    amount: 0.3,
+  })
 
   const numericValue =
     typeof value === "number"
@@ -25,11 +30,19 @@ function AnimatedCounter({
       : Number(String(value).replace(/[^\d.-]/g, "")) || 0
 
   useEffect(() => {
-    if (!isInView) return
+    if (!isInView) {
+      return
+    }
+
+    if (numericValue <= 0) {
+      setCount(0)
+      return
+    }
 
     let start = 0
     const duration = 2000
-    const steps = duration / 16
+    const interval = 16
+    const steps = Math.max(1, Math.floor(duration / interval))
     const increment = numericValue / steps
 
     const timer = window.setInterval(() => {
@@ -38,12 +51,15 @@ function AnimatedCounter({
       if (start >= numericValue) {
         setCount(numericValue)
         window.clearInterval(timer)
-      } else {
-        setCount(Math.floor(start))
+        return
       }
-    }, 16)
 
-    return () => window.clearInterval(timer)
+      setCount(Math.floor(start))
+    }, interval)
+
+    return () => {
+      window.clearInterval(timer)
+    }
   }, [isInView, numericValue])
 
   return (
@@ -56,14 +72,24 @@ function AnimatedCounter({
 }
 
 export function StatsSection() {
+  const stats = siteConfig.stats
+
+  /*
+   * Les statistiques sont actuellement vides dans site.ts.
+   * On ne rend donc pas une section vide.
+   */
+  if (!stats || stats.length === 0) {
+    return null
+  }
+
   return (
     <section
-      className="relative overflow-hidden bg-pah-green py-16"
+      className="relative overflow-hidden bg-pah-green py-16 md:py-20"
       aria-label="Chiffres clés"
     >
-      {/* Background pattern */}
+      {/* Motif décoratif discret */}
       <div
-        className="pointer-events-none absolute inset-0 opacity-5"
+        className="pointer-events-none absolute inset-0 opacity-[0.04]"
         aria-hidden="true"
       >
         <div
@@ -75,14 +101,32 @@ export function StatsSection() {
         />
       </div>
 
-      <div className="container relative z-10 mx-auto px-4">
-        <div className="grid grid-cols-2 gap-8 lg:grid-cols-4">
-          {siteConfig.stats.map((stat, index) => (
+      <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
+        <div
+          className="
+            grid
+            grid-cols-2
+            gap-8
+            md:grid-cols-2
+            lg:grid-cols-4
+            lg:gap-10
+          "
+        >
+          {stats.map((stat, index) => (
             <motion.div
               key={`${stat.label}-${index}`}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
+              initial={{
+                opacity: 0,
+                y: 20,
+              }}
+              whileInView={{
+                opacity: 1,
+                y: 0,
+              }}
+              viewport={{
+                once: true,
+                amount: 0.2,
+              }}
               transition={{
                 duration: 0.5,
                 delay: index * 0.1,
@@ -90,7 +134,17 @@ export function StatsSection() {
               }}
               className="text-center"
             >
-              <div className="mb-2 text-4xl font-bold text-white md:text-5xl">
+              <div
+                className="
+                  mb-2
+                  text-3xl
+                  font-bold
+                  tracking-tight
+                  text-white
+                  sm:text-4xl
+                  md:text-5xl
+                "
+              >
                 <AnimatedCounter
                   value={stat.value}
                   suffix={stat.suffix}
@@ -98,7 +152,15 @@ export function StatsSection() {
                 />
               </div>
 
-              <div className="text-sm font-medium text-white/70 md:text-base">
+              <div
+                className="
+                  text-sm
+                  font-medium
+                  leading-relaxed
+                  text-white/70
+                  sm:text-base
+                "
+              >
                 {stat.label}
               </div>
             </motion.div>
